@@ -13,7 +13,7 @@ public class Admin  extends User{
                 new ViewProductById(),
                 new UpdateProduct(),
                 new DeleteProduct(),
-                new SearchProduct(),
+//                new SearchProduct(),
                 new Exit(),
 
 
@@ -40,7 +40,7 @@ public class Admin  extends User{
                 new ViewProductById(),
                 new UpdateProduct(),
                 new DeleteProduct(),
-                new SearchProduct(),
+//                new SearchProduct(),
                 new Exit(),
 
 
@@ -51,10 +51,11 @@ public class Admin  extends User{
    public  void menu(Database database, User user){
 
        System.out.println("1. Add Product");
-       System.out.println("2. View Product");
-       System.out.println("3. Update Product");
-       System.out.println("4. Delete Product");
-       System.out.println("5. Exit");
+       System.out.println("2. View Products");
+       System.out.println("3. View product by id");
+       System.out.println("4. Update Product");
+       System.out.println("5. Delete Product");
+       System.out.println("6. Exit");
        Scanner s = new Scanner(System.in);
        int n = s.nextInt();
        this.operations[n-1].oper(database, user);
