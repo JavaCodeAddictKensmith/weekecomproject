@@ -11,6 +11,7 @@ public class ViewProducts implements IOOperation {
 //            System.out.println(b.getName()+"\t\t"+b.getAuthor() +"\t\t"+b.getPublisher()+"\t\t"+b.getAdress()+"\t"+b.getQty()+"\t"+b.getPrice()+"\t"+b.getBrwcopies());
 //        }
 //        System.out.println();
+        database.getProducts();
         user.menu(database,user);
 
     }

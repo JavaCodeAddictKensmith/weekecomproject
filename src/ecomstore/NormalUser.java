@@ -43,8 +43,8 @@ public class NormalUser extends  User{
         System.out.println("1. Like Product");
         System.out.println("2. Unlike product");
         System.out.println("3. View Products");
-        System.out.println("4. View  sole product");
-        System.out.println("5. View  product by category");
+        System.out.println("4. View sole product");
+        System.out.println("5. View product by category");
         System.out.println("6. Add product to cart");
         System.out.println("7. Remove product from cart");
         System.out.println("8. Exit");

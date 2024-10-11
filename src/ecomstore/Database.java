@@ -4,15 +4,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
 
 public class Database {
@@ -163,11 +160,37 @@ private ArrayList<String> booknames= new ArrayList<String>();
         return account;
     }
 
-    public void AddBook(Product book) {
-        books.add(book);
-        booknames.add(book.getName());
-        saveBooks();
+
+    public void AddProduct(Product s) {
+        con = DBConnection.createDbConnection();
+        String query ="insert into Products values(?,?,?,?,?,?)";
+
+        try{
+            PreparedStatement pstm = con.prepareStatement(query);
+            pstm.setInt(1,s.getId());
+            pstm.setInt(2,s.getCat_id());
+            pstm.setString(3,s.getName());
+            pstm.setInt(4,s.getQty());
+            pstm.setString(5,s.getPrice());
+            pstm.setInt(6,s.getLikes());
+            int cnt = pstm.executeUpdate();
+//          System.out.println("------------------------------------");
+            if(cnt!=0){
+                System.out.println("Product Added successfully !!!");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
+
+
+//    public void AddBook(Product book) {
+//        books.add(book);
+//        booknames.add(book.getName());
+//        saveBooks();
+//    }
 
     private void getUsers() {
 //        String text1 = "";
@@ -267,15 +290,214 @@ private ArrayList<String> booknames= new ArrayList<String>();
         return books;
     }
 
-    public int getBook(String bookname) {
+    public int getProduct(String productname) {
         int i = -1;
-        for (Product book : books) {
-            if (book.getName().matches(bookname)) {
-                i = books.indexOf(book);
+//
+
+        con = DBConnection.createDbConnection();
+        String query = "select * from Products ";
+
+        try{
+            Statement stmt = con.createStatement();
+            ResultSet  resultSet= stmt.executeQuery(query);
+            while(resultSet.next()){
+
+
+//
+
+
+                if( resultSet.getString(3).matches(productname)){
+                    i= resultSet.getInt(1);
+//
+                    break;
+
+                }
+//                System.out.format("%d\t%s\t%f\t%d\n",resultSet.getInt(1), resultSet.getString(2), resultSet.getDouble(3),resultSet.getInt(4));
+
+
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
+
         return i;
+
     }
+    public int getProductId(int productId) {
+        int i = -1;
+//
+
+        con = DBConnection.createDbConnection();
+        String query = "select * from Products ";
+
+        try{
+            Statement stmt = con.createStatement();
+            ResultSet  resultSet= stmt.executeQuery(query);
+            while(resultSet.next()){
+
+
+//
+                String strdbId =   String.valueOf( resultSet.getInt(1)) ;
+                String prIdString = String.valueOf( productId) ;
+//                String strdbPhone = String.format("%f", resultSet.getDouble(4));
+
+                if( strdbId.matches(prIdString)){
+                    i= resultSet.getInt(1);
+//
+                    break;
+
+                }
+//                System.out.format("%d\t%s\t%f\t%d\n",resultSet.getInt(1), resultSet.getString(2), resultSet.getDouble(3),resultSet.getInt(4));
+
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+        return i;
+
+    }
+
+
+
+    public int getCartId(int productId) {
+        int i = -1;
+//
+
+        con = DBConnection.createDbConnection();
+        String query = "select * from ProductCart ";
+
+        try{
+            Statement stmt = con.createStatement();
+            ResultSet  resultSet= stmt.executeQuery(query);
+            while(resultSet.next()){
+
+
+//
+                String strdbId =   String.valueOf( resultSet.getInt(1)) ;
+                String prIdString = String.valueOf( productId) ;
+//                String strdbPhone = String.format("%f", resultSet.getDouble(4));
+
+                if( strdbId.matches(prIdString)){
+                    i= resultSet.getInt(1);
+//
+                    break;
+
+                }
+//                System.out.format("%d\t%s\t%f\t%d\n",resultSet.getInt(1), resultSet.getString(2), resultSet.getDouble(3),resultSet.getInt(4));
+
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+        return i;
+
+    }
+
+    public int getCategoryId(int categoryId) {
+        int i = -1;
+
+        con = DBConnection.createDbConnection();
+        String query = "select * from Category";
+
+        try{
+            Statement stmt = con.createStatement();
+            ResultSet  resultSet= stmt.executeQuery(query);
+            while(resultSet.next()){
+
+                String strdbId =   String.valueOf( resultSet.getInt(1)) ;
+                String prIdString = String.valueOf(categoryId) ;
+
+
+                if( strdbId.matches(prIdString)){
+                    i= resultSet.getInt(1);
+//
+                    break;
+
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+        return i;
+
+    }
+
+
+
+    public  void getProducts () {
+        int i = -1;
+//
+
+        con = DBConnection.createDbConnection();
+        String query = "select * from Products ";
+
+        try{
+            Statement stmt = con.createStatement();
+            ResultSet  resultSet= stmt.executeQuery(query);
+            System.out.println("=================BELOW ARE THE LIST OF PRODUCTS AND PRODUCT DETAILS==========================");
+            System.out.format("%s\t%s\t%s\t%s\t%s\t%s\n", "ID","CATEGORY_ID","NAME","QUANTITY","PRICE","LIKES");
+
+            System.out.println("------------------------------------");
+            while(resultSet.next()){
+
+
+                System.out.format("%d\t%d\t%s\t%d\t%s\t%d\n",resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3),resultSet.getInt(4),resultSet.getString(5),resultSet.getInt(6));
+                System.out.println("------------------------------------");
+
+
+            }
+            System.out.println();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+    }
+    public Product getProductById(int id){
+        con = DBConnection.createDbConnection();
+        String query = "select * from Products where id="+id;
+//        Product product= null;
+        Product product = new Product();
+
+        try{
+            Statement stmt = con.createStatement();
+            ResultSet  resultSet= stmt.executeQuery(query);
+            System.out.println("=================BELOW THE PRODUCT DETAILS==========================");
+
+            System.out.format("%s\t%s\t%s\t%s\t%s\t%s\n", "ID","CATEGORY_ID","NAME","QUANTITY","PRICE","LIKES");
+
+
+            while(resultSet.next()){
+                System.out.format("%d\t%d\t%s\t%d\t%s\t%d\n",resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3),resultSet.getInt(4),resultSet.getString(5),resultSet.getInt(6));
+//                product = new Product(resultSet.getInt(1),resultSet.getInt(2),resultSet.getString(3),resultSet.getInt(4),resultSet.getString(5),resultSet.getInt(6));
+                product.setId(resultSet.getInt(1));
+                product.setCat_id(resultSet.getInt(2));
+                product.setName(resultSet.getString(3));
+                product.setQty(resultSet.getInt(4));
+                product.setPrice(resultSet.getString(5));
+                product.setLikes(resultSet.getInt(6));
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return product;
+
+    }
+
 
     public Product getBook(int i) {
         return books.get(i);
@@ -364,7 +586,7 @@ private ArrayList<String> booknames= new ArrayList<String>();
             Statement stmt = con.createStatement();
             ResultSet  resultSet= stmt.executeQuery(query);
             while(resultSet.next()){
-                String strdbPhone = String.format("%f", resultSet.getDouble(4));
+
 
                 if(resultSet.getString(2).matches(name)){
                     f = true;
@@ -393,6 +615,154 @@ private ArrayList<String> booknames= new ArrayList<String>();
         }
         return u;
     }
+
+    public void updateProduct(
+          int id,
+ int cat_id,
+String name,
+    int qty,
+   String price,
+ int likes) {
+        con = DBConnection.createDbConnection();
+      String query = "update Products  set category_id=?, name=?, qty=?, price=?, likes=? where id=?";
+
+//        String query ="UPDATE Products \n" +
+//                "SET name = ?, \n" +
+//                "    category_id = ?, \n" +
+//                "    qty = ?, \n" +
+//                "    price = ?, \n" +
+//                "    likes = ?\n" +
+//                "WHERE id = ?";
+
+        try{
+            PreparedStatement pstm = con.prepareStatement(query);
+
+            pstm.setInt(1,cat_id);
+            pstm.setString(2,name);
+            pstm.setInt(3,qty);
+            pstm.setString(4,price);
+            pstm.setInt(5,likes);
+            pstm.setInt(6,id);
+            int cnt = pstm.executeUpdate();
+            if(cnt != 0)
+                System.out.println("Products Details updated successfully");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+    public void deleteProduct(int id) {
+        con = DBConnection.createDbConnection();
+        String query = "delete  from Products where id=?" ;
+        try{
+            PreparedStatement pstm = con.prepareStatement(query);
+
+            pstm.setInt(1,id);
+
+            int cnt = pstm.executeUpdate();
+            if(cnt != 0)
+                System.out.println("Product deleted successfully");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public  void getProductsByCategory (int cat_id) {
+
+        con = DBConnection.createDbConnection();
+        String query = "select * from Products where category_id="+cat_id;
+
+        try{
+            Statement stmt = con.createStatement();
+            ResultSet  resultSet= stmt.executeQuery(query);
+            System.out.println("=================BELOW ARE THE LIST OF PRODUCTS AND PRODUCT DETAILS==========================");
+            System.out.format("%s\t%s\t%s\t%s\t%s\t%s\n", "ID","CATEGORY_ID","NAME","QUANTITY","PRICE","LIKES");
+
+            System.out.println("------------------------------------");
+            while(resultSet.next()){
+
+
+                System.out.format("%d\t%d\t%s\t%d\t%s\t%d\n",resultSet.getInt(1), resultSet.getInt(2), resultSet.getString(3),resultSet.getInt(4),resultSet.getString(5),resultSet.getInt(6));
+                System.out.println("------------------------------------");
+
+
+            }
+            System.out.println();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+    }
+    public void AddProductToCart(int prodid) {
+        con = DBConnection.createDbConnection();
+        String query ="insert into ProductCart values(?,?,?,?,?,?,?)";
+
+//        private  int id;
+//        private int category_id;
+//        private  int product_id;
+//        private String name;
+//        private int qty;
+//        private String price;
+//        private int likes;
+
+//        getProductId(productId) != -1
+
+        if(getProductId(prodid)!=-1){
+            Product product = getProductById(prodid);
+            try{
+                PreparedStatement pstm = con.prepareStatement(query);
+                pstm.setInt(1,product.getId());
+                pstm.setInt(2,product.getCat_id());
+                pstm.setInt(3,product.getId());
+                pstm.setString(4,product.getName());
+                pstm.setInt(5,product.getQty());
+                pstm.setString(6,product.getPrice());
+                pstm.setInt(7,product.getLikes());
+                int cnt = pstm.executeUpdate();
+//          System.out.println("------------------------------------");
+                if(cnt!=0){
+                    System.out.println("Product Added to cart successfully !!!");
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+
+
+    }
+
+    public void removeProductFromCart(int id) {
+        con = DBConnection.createDbConnection();
+        String query = "delete  from ProductCart where id=?" ;
+        try{
+            PreparedStatement pstm = con.prepareStatement(query);
+
+            pstm.setInt(1,id);
+
+            int cnt = pstm.executeUpdate();
+            if(cnt != 0)
+                System.out.println("Product removed from cart successfully");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 
 //    private Order parseOrder(String s) {
 //        String[] a = s.split("<N/>");
